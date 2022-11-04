@@ -7,6 +7,7 @@ import cv2 as cv
 def ImgToMatrix(filename):
     # membuat gambar menjadi grayscale
     img = cv.imread(filename)
+    img = cv.resize(img, (256,256))
     _grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     return _grey
 
@@ -19,14 +20,8 @@ def UkuranGambar(gambar):
     kolom = gambar.shape[1]
     return [baris,kolom]
 
-gambar = ImgToMatrix("./datasets/edu.PNG")
+gambar = ImgToMatrix("./datasets/edu.png")
 
 cv.namedWindow('image', cv.WINDOW_AUTOSIZE)
 cv.imshow('image', gambar)
 cv.waitKey()
-
-ukuran = UkuranGambar(gambar)
-
-print(ukuran)
-
-
