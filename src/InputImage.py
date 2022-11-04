@@ -1,4 +1,5 @@
 import cv2 as cv
+import os
 
 # Fungsi mengubah suatu input gambar menjadi matriks.
 # Gambar dijadikan grayscale, mengembalikan matriks
@@ -20,8 +21,27 @@ def UkuranGambar(gambar):
     kolom = gambar.shape[1]
     return [baris,kolom]
 
-gambar = ImgToMatrix("./datasets/edu.png")
+def DataSetToMatrix(dir):
+    S = []
+    for filename in os.listdir(dir):
+        temp = ImgToMatrix(f'{dir}/{filename}')
+        S += [temp]
+    return S
 
-cv.namedWindow('image', cv.WINDOW_AUTOSIZE)
-cv.imshow('image', gambar)
-cv.waitKey()
+def getAllDir():
+    S = []
+    dir = './datasets'
+    for filename in os.listdir(dir):
+        S += [filename]
+    return S
+
+def FolderToMatrix(dir):
+    S = []
+    for i in range(len(dir)):
+        temp = DataSetToMatrix(f'./datasets/{dir[i]}')
+        S += [temp]
+    return S
+
+S = getAllDir()
+arr = FolderToMatrix(S)
+print(arr)
