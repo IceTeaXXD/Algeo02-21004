@@ -30,7 +30,7 @@ def DataSetToMatrix(dir):
 
 def getAllDir():
     S = []
-    dir = './datasets'
+    dir = '../datasets'
     for filename in os.listdir(dir):
         S += [filename]
     return S
@@ -38,10 +38,10 @@ def getAllDir():
 def FolderToMatrix(dir):
     S = []
     for i in range(len(dir)):
-        temp = DataSetToMatrix(f'./datasets/{dir[i]}')
+        temp = DataSetToMatrix(f'../datasets/{dir[i]}')
         S += [temp]
     return S
 
-S = getAllDir()
+""" S = getAllDir()
 arr = FolderToMatrix(S)
-print(arr)
+print(arr) """
