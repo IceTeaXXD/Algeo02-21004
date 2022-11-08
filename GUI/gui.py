@@ -11,7 +11,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\File\Nadil\STEI ITB\Semester 3\Algeo02-21004\build\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -57,7 +57,7 @@ canvas.create_text(
     anchor="nw",
     text="Academicos",
     fill="#000000",
-    font=("Poppins Regular", 32 * -1)
+    font=("Poppins Bold", 32 * -1)
 )
 
 canvas.create_text(
@@ -66,7 +66,7 @@ canvas.create_text(
     anchor="nw",
     text="Result :",
     fill="#000000",
-    font=("Poppins Regular", 32 * -1)
+    font=("Poppins Bold", 32 * -1)
 )
 
 canvas.create_text(
@@ -75,7 +75,7 @@ canvas.create_text(
     anchor="nw",
     text="Compile Time :",
     fill="#000000",
-    font=("Poppins Regular", 32 * -1)
+    font=("Poppins Bold", 32 * -1)
 )
 
 canvas.create_text(
@@ -84,7 +84,7 @@ canvas.create_text(
     anchor="nw",
     text="Eigen Face Recognition",
     fill="#000000",
-    font=("Poppins Regular", 64 * -1)
+    font=("Poppins Bold", 64 * -1)
 )
 
 button_image_1 = PhotoImage(
