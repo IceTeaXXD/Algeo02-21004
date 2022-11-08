@@ -1,5 +1,5 @@
 # Algeo02-21004
-Tugas Besar 2 IF2123 - Kelompok Orden_Jarretera
+Tugas Besar 2 IF2123 - Kelompok Academicos
 | NIM | Nama |
 | :---: | :---: |
 | 13521004 | Henry Anand Septian Radityo |

@@ -64,11 +64,19 @@ def A_to_Q(matriks):
 
 def A_to_R(Q, A):
     # Make transpose
+    R = [[0 for i in range(3)] for j in range(3)]
     temp = Q
+    skip = 0
     for i in range(3):
         for j in range(3):
-            Q[i][j] = temp[j][i]
-    R = np.dot(Q,A)
+            if (j<skip):
+                R[i][j] = 0
+            # Q[i][j] = temp[j][i]
+            else:
+                ai = GetVectorK(A,j)
+                ei = GetVectorK(Q,i)
+                R[i][j] = np.dot(ai,ei)
+        skip +=1
     return R
 
 def getEigen(A):
@@ -81,15 +89,3 @@ def getEigen(A):
     return EigenVal
 
 A = [[2, 2, 4], [1, 3, 5],[2, 3, 4]]
-print(getEigen(A))
-
-
-a = np.array([[2, 2, 4], 
-              [1, 3, 5],
-              [2, 3, 4]])
-p = [1, 5, 10, 20]
-for i in range(20):
-    q, r = qr(a)
-    a = np.dot(r, q)
-
-print(a)
