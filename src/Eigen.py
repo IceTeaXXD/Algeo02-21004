@@ -2,21 +2,20 @@
 # deskripsi: melakukan operasi-operasi eigen
 import numpy as np
 import math
-from numpy.linalg import qr
 
 def VektorSatuan(M):
     # convert numpy array to normal array
     temp = []
-    for i in range(3):
+    for i in range(len(M)):
         temp.append(M[i])
 
     sum = 0
-    for i in range (3):
+    for i in range (len(M)):
         sum += temp[i] ** 2
 
     sum = math.sqrt(sum)
 
-    for i in range (3):
+    for i in range (len(M)):
         temp[i] = temp[i] / sum
     temp = np.array(temp)
 
@@ -24,28 +23,27 @@ def VektorSatuan(M):
     
 def DotProduct(M,N):
     sum = 0
-    for i in range (3):
+    for i in range (len(M)):
         sum = sum + M[i] * N[i]
     return sum
 
 def GetVectorK(matriks, k):
     temp = []
-    for i in range(3):
-        for j in range(3):
+    for i in range(len(matriks)):
+        for j in range(len(matriks[0])):
             if (j == k):
                 temp.append(matriks[i][j])
     temp = np.array(temp)
     return temp
 
 def A_to_Q(matriks):
-    # buat matriks 256 x 256
     Q = []
     tempMat = []
 
-    for i in range(3):
+    for i in range(len(matriks)):
         tempMat.append(matriks[i])
         
-    for i in range(3):
+    for i in range(len(matriks)):
         ak = GetVectorK(tempMat,i)
         if (i == 0):
             temp = GetVectorK(tempMat,i)
@@ -64,14 +62,13 @@ def A_to_Q(matriks):
 
 def A_to_R(Q, A):
     # Make transpose
-    R = [[0 for i in range(3)] for j in range(3)]
+    R = [[0 for i in range(len(A))] for j in range(len(A))]
     temp = Q
     skip = 0
-    for i in range(3):
-        for j in range(3):
+    for i in range(len(A)):
+        for j in range(len(A)):
             if (j<skip):
                 R[i][j] = 0
-            # Q[i][j] = temp[j][i]
             else:
                 ai = GetVectorK(A,j)
                 ei = GetVectorK(Q,i)
@@ -80,12 +77,50 @@ def A_to_R(Q, A):
     return R
 
 def getEigen(A):
-    # iterasi sebanyak 20 kali saja
-    EigenVal = A
-    for i in range(20):
-        Q = A_to_Q(EigenVal)
-        R = A_to_R(Q,EigenVal)
-        EigenVal = np.dot(R,Q)
-    return EigenVal
+    # Mengembalikan EigenValue dan EigenVector
+    
+    # Eigen Value dalam bentuk Matriks
+    EigenValMat = []
+    for i in range(len(A)):
+        EigenValMat.append(A[i])
+    
+    # buat matriks diagonal seukuran A untuk Eigen Vector
+    EigenVec = [[0 for i in range(len(A[0]))] for j in range(len(A))]
+    for i in range(len(EigenVec)):
+        for j in range(len(EigenVec[0])):
+            if(i == j):
+                EigenVec[i][j] = 1
 
-A = [[2, 2, 4], [1, 3, 5],[2, 3, 4]]
+    # Iterasi sebanyak 20 kali untuk konvergen
+    for i in range(200):
+        Q = A_to_Q(EigenValMat)
+        R = A_to_R(Q,EigenValMat)
+        EigenVec = np.dot(EigenVec, Q)
+        EigenValMat = np.dot(R,Q)
+
+    # simpan Eigen Value dari EigenValMat dalam EigenVal
+    EigenVal = []
+    for i in range(len(EigenValMat)):
+        for j in range(len(EigenValMat)):
+            if (i == j):
+                EigenVal.append(EigenValMat[i][j])
+    
+    EigenVal = np.array(EigenVal)
+
+    return EigenVal, EigenVec
+
+""" A = np.array([[2, 2, 4], 
+              [1, 3, 5],
+              [2, 3, 4]])
+Q = A_to_Q(A)
+
+Val, Vec = getEigen(A)
+print(Val)
+print(Vec)
+
+
+# Bandingkan
+
+w,v = np.linalg.eig(A)
+print('E-value:', w)
+print('E-vector', v) """
