@@ -3,12 +3,20 @@
 import numpy as np
 
 def VektorSatuan(M):
+    # convert numpy array to normal array
+    temp = []
+    for i in range(256):
+        temp.append(M[i])
+
     sum = 0
     for i in range (256):
-        sum = M[i] * M[i]
+        sum = temp[i] * temp[i]
     for i in range (256):
-        M[i] = M[i] / sum
+        temp[i] = temp[i] / sum
+    temp = np.array(temp)
 
+    return temp
+    
 def DotProduct(M,N):
     sum = 0
     for i in range (256):
@@ -20,7 +28,7 @@ def GetVectorK(matriks, k):
     for i in range(256):
         for j in range(256):
             if (j == k):
-                temp.extend(matriks[i][j])
+                temp.append(matriks[i][j])
     temp = np.array(temp)
     return temp
 
@@ -37,7 +45,7 @@ def A_to_Q(matriks):
         else:
             temp = ak
             for j in range (i):
-                ej = getVector(Q,j)
+                ej = GetVectorK(Q,j)
                 temp +=  add(ak,np.dot(DotProduct(ak,ej),ej))
             Q.extend(temp)
     return Q
