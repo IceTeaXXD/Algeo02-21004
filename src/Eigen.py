@@ -30,9 +30,7 @@ def DotProduct(M,N):
 def GetVectorK(matriks, k):
     temp = []
     for i in range(len(matriks)):
-        for j in range(len(matriks[0])):
-            if (j == k):
-                temp.append(matriks[i][j])
+        temp.append(matriks[i][k])
     temp = np.array(temp)
     return temp
 
@@ -62,11 +60,11 @@ def A_to_Q(matriks):
 
 def A_to_R(Q, A):
     # Make transpose
-    R = [[0 for i in range(len(A))] for j in range(len(A))]
+    R = [[0 for i in range(len(A[0]))] for j in range(len(A))]
     temp = Q
     skip = 0
     for i in range(len(A)):
-        for j in range(len(A)):
+        for j in range(len(A[0])):
             if (j<skip):
                 R[i][j] = 0
             else:
@@ -92,7 +90,7 @@ def getEigen(A):
                 EigenVec[i][j] = 1
 
     # Iterasi sebanyak 20 kali untuk konvergen
-    for i in range(200):
+    for i in range(20):
         Q = A_to_Q(EigenValMat)
         R = A_to_R(Q,EigenValMat)
         EigenVec = np.dot(EigenVec, Q)
