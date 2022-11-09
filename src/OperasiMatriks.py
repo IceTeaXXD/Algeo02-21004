@@ -21,13 +21,13 @@ def Selisih(S,data):
     d = np.array([[[0 for j in range (256)] for i in range (256)] for k in range (data)])
     mp = np.array(RataRataMatrix(S))
     for i in range (data):
-        d[i] = np.subtract(mp[i],sp)
+        d[i] = np.subtract(sp[i],mp)
     return d
 
 def kovarian(S,data):
     k = np.array([[0 for i in range (256)] for j in range (256)])
     sp = np.array(S)
     for i in range (data):
-        k = k + np.multiply(sp[i],np.transpose(sp[i]))
-    k /= data
+        k = k + np.dot(sp[i],np.transpose(sp[i]))
+    k = np.multiply(k,(1/data))
     return k
