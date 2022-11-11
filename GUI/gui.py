@@ -12,12 +12,12 @@ def relative_to_assets(path: str) -> Path:
 window = Tk()
 
 window.geometry("1280x720")
-window.configure(bg = "#BFBFBF")
+window.configure(bg = "#12151D")
 window.title("Face Recognition")
 
 canvas = Canvas(
     window,
-    bg = "#BFBFBF",
+    bg = "#12151D",
     height = 720,
     width = 1280,
     bd = 0,
@@ -27,55 +27,70 @@ canvas = Canvas(
 
 canvas.place(x = 0, y = 0)
 canvas.create_rectangle(
-    853.0,
-    145.0,
-    1253.0,
-    545.0,
+    706.0,
+    158.0,
+    1048.0,
+    500.0,
     fill="#000000",
     outline="")
 
 canvas.create_rectangle(
-    387.0,
-    145.0,
-    787.0,
-    545.0,
+    139.0,
+    526.0,
+    605.0,
+    600.0,
+    fill="#333A47",
+    outline="")
+
+canvas.create_rectangle(
+    706.0,
+    526.0,
+    1172.0,
+    600.0,
+    fill="#333A47",
+    outline="")
+
+canvas.create_rectangle(
+    233.0,
+    158.0,
+    575.0,
+    500.0,
     fill="#000000",
     outline="")
 
 canvas.create_text(
-    1015.0,
-    644.0,
+    896.0,
+    20.0,
     anchor="nw",
-    text="Academicos",
-    fill="#000000",
-    font=("Poppins Bold", 32 * -1)
+    text="Copyright © 2022 Academicos",
+    fill="#D4D4D4",
+    font=("Poppins Regular", 20 * -1)
 )
 
 canvas.create_text(
-    673.0,
-    554.0,
+    736.0,
+    547.0,
     anchor="nw",
     text="Result :",
-    fill="#000000",
+    fill="#D4D4D4",
     font=("Poppins Bold", 32 * -1)
 )
 
 canvas.create_text(
-    77.0,
-    554.0,
+    163.0,
+    547.0,
     anchor="nw",
     text="Compile Time :",
-    fill="#000000",
+    fill="#D4D4D4",
     font=("Poppins Bold", 32 * -1)
 )
-
 canvas.create_text(
-    270.0,
-    28.0,
+    403.0,
+    82.0,
     anchor="nw",
     text="Eigen Face Recognition",
-    fill="#000000",
-    font=("Poppins Bold", 64 * -1)
+    fill="#D4D4D4",
+    font=("Poppins Bold", 40 * -1)
 )
 
 button_image_1 = PhotoImage(
@@ -88,10 +103,10 @@ button_1 = Button(
     relief="flat"
 )
 button_1.place(
-    x=59.0,
-    y=332.0,
-    width=262.1025390625,
-    height=55.0
+    x=536.0,
+    y=669.0,
+    width=198.06346130371094,
+    height=35.0
 )
 
 button_image_2 = PhotoImage(
@@ -104,10 +119,10 @@ button_2 = Button(
     relief="flat"
 )
 button_2.place(
-    x=59.0,
-    y=443.0,
-    width=262.1025390625,
-    height=55.0
+    x=89.0,
+    y=670.0,
+    width=150.0634765625,
+    height=35.0
 )
 
 button_image_3 = PhotoImage(
@@ -120,10 +135,10 @@ button_3 = Button(
     relief="flat"
 )
 button_3.place(
-    x=59.0,
-    y=221.0,
-    width=262.1025390625,
-    height=55.0
+    x=980.0,
+    y=669.0,
+    width=230.0,
+    height=33.0
 )
-window.resizable(False, False)
+window.resizable(True, True)
 window.mainloop()
