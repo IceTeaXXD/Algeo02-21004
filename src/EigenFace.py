@@ -28,23 +28,21 @@ def EigenNewFace(FaceDir,mean):
 
     return miuFace
 
-mean = II.DataSetToMatrix("../datasets/pins_Adriana Lima/")
-arr = EigenNewFace("../datasets/pins_Adriana Lima/Adriana Lima0_0.jpg",mean)
-print(arr)
-
-
 def EuclideanDistance(FaceDir, EigenNewFace):
     arr = []
     min = 99999999
     faceMatriks = II.ImgToMatrix(FaceDir)
     for i in range (len(faceMatriks)):
         temp = np.subtract(faceMatriks[i],EigenNewFace)
-        for j in range (256):
+        for j in range (len(temp[i])):
             for k in range (256):
                 distance = temp[i][j]**2
-                if distance < min:
+                if (distance < min).any():
                     min = distance
                     idxdistance = i
         arr.append(distance)
     return idxdistance
-    
+
+mean = II.DataSetToMatrix("../datasets/pins_Adriana Lima/")
+idx = EuclideanDistance("../datasets/pins_Adriana Lima/Adriana Lima173_74.jpg",EigenNewFace("../datasets/pins_Adriana Lima/Adriana Lima173_74.jpg",mean))
+print(idx)
