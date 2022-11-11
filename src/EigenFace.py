@@ -19,13 +19,15 @@ def EigenFace(eigenvector, selisih, S):
     miuarr = np.array(miuarr)
     return miuarr
 
-def EigenNewFace(FaceDir):
-
+def EigenNewFace(FaceDir,mean):
     # Buat wajah jadi matriks
     faceMatriks = II.ImgToMatrix(FaceDir)
-    avgFace = OM.RataRataMatrix(faceMatriks)
-    EigenVal, EigenVec = Eig.getEigen(avgFace)
-    subtracted = np.subtract(faceMatriks,avgFace)
+    EigenVal, EigenVec = Eig.getEigen(faceMatriks)
+    subtracted = np.subtract(faceMatriks,mean)
     miuFace = np.dot(EigenVec, subtracted)
 
     return miuFace
+
+mean = II.DataSetToMatrix("../datasets/pins_Adriana Lima/")
+arr = EigenNewFace("../datasets/pins_Adriana Lima/Adriana Lima0_0.jpg",mean)
+print(arr)
