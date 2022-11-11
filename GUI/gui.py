@@ -25,41 +25,42 @@ canvas = Canvas(
     relief = "ridge"
 )
 
+#Dummy Image
 canvas.place(x = 0, y = 0)
 canvas.create_rectangle(
     706.0,
     158.0,
-    1048.0,
-    500.0,
+    948.0,
+    400.0,
+    fill="#000000",
+    outline="")
+canvas.create_rectangle(
+    233.0,
+    158.0,
+    475.0,
+    400.0,
     fill="#000000",
     outline="")
 
 canvas.create_rectangle(
     139.0,
-    526.0,
-    605.0,
-    600.0,
+    426.0,
+    505.0,
+    480.0,
     fill="#333A47",
     outline="")
 
 canvas.create_rectangle(
     706.0,
-    526.0,
-    1172.0,
-    600.0,
+    426.0,
+    1072.0,
+    480.0,
     fill="#333A47",
-    outline="")
-
-canvas.create_rectangle(
-    233.0,
-    158.0,
-    575.0,
-    500.0,
-    fill="#000000",
     outline="")
 
 canvas.create_text(
     896.0,
+    # 1000,
     20.0,
     anchor="nw",
     text="Copyright © 2022 Academicos",
@@ -69,7 +70,7 @@ canvas.create_text(
 
 canvas.create_text(
     736.0,
-    547.0,
+    437.0,
     anchor="nw",
     text="Result :",
     fill="#D4D4D4",
@@ -78,7 +79,7 @@ canvas.create_text(
 
 canvas.create_text(
     163.0,
-    547.0,
+    437.0,
     anchor="nw",
     text="Compile Time :",
     fill="#D4D4D4",
@@ -93,6 +94,7 @@ canvas.create_text(
     font=("Poppins Bold", 40 * -1)
 )
 
+#Button image
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
 button_1 = Button(
@@ -101,10 +103,10 @@ button_1 = Button(
     highlightthickness=0,
     command=lambda: print("button_1 clicked"),
     relief="flat"
-)
+)   
 button_1.place(
     x=536.0,
-    y=669.0,
+    y=569.0,
     width=198.06346130371094,
     height=35.0
 )
@@ -120,8 +122,8 @@ button_2 = Button(
 )
 button_2.place(
     x=89.0,
-    y=670.0,
-    width=150.0634765625,
+    y=570.0,
+    width=200.0634765625,
     height=35.0
 )
 
@@ -136,8 +138,8 @@ button_3 = Button(
 )
 button_3.place(
     x=980.0,
-    y=669.0,
-    width=230.0,
+    y=569.0,
+    width=220.0,
     height=33.0
 )
 window.resizable(True, True)
