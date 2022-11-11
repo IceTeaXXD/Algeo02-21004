@@ -91,10 +91,14 @@ def getEigen(A):
 
     # Iterasi sebanyak 20 kali untuk konvergen
     for i in range(20):
+        # print(f"{(i+1)*100/20}%")
+        # print("Start Q")
         Q = A_to_Q(EigenValMat)
+        # print("Start R")
         R = A_to_R(Q,EigenValMat)
         EigenVec = np.dot(EigenVec, Q)
         EigenValMat = np.dot(R,Q)
+        # print(f"Done {(i+1)*100/20}%")
 
     # simpan Eigen Value dari EigenValMat dalam EigenVal
     EigenVal = []
