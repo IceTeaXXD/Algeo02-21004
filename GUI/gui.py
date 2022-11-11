@@ -13,7 +13,7 @@ window = Tk()
 
 window.geometry("1280x720")
 window.configure(bg = "#BFBFBF")
-
+window.title("Face Recognition")
 
 canvas = Canvas(
     window,
