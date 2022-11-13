@@ -1,6 +1,7 @@
 # filename: EigenFace.py
 # deskripsi: melakukan algoritma eigenface
-
+from PIL import Image
+import cv2 as cv
 import numpy as np
 import OperasiMatriks as OM
 import Eigen as Eig
@@ -28,10 +29,8 @@ def EigenNewFace(FaceDir,mean):
 
     return miuFace
 
-def EuclideanDistance(FaceDir, EigenNewFace):
-    arr = []
-    min = 99999999
-    faceMatriks = II.ImgToMatrix(FaceDir)
+def EuclideanDistance(faceMatriks, EigenNewFace):
+    min = 999999999999
     for i in range (len(faceMatriks)):
         temp = np.subtract(faceMatriks[i],EigenNewFace)
         for j in range (len(temp[i])):
@@ -40,9 +39,23 @@ def EuclideanDistance(FaceDir, EigenNewFace):
                 if (distance < min).any():
                     min = distance
                     idxdistance = i
-        arr.append(distance)
     return idxdistance
 
-mean = II.DataSetToMatrix("../datasets/pins_Adriana Lima/")
-idx = EuclideanDistance("../datasets/pins_Adriana Lima/Adriana Lima173_74.jpg",EigenNewFace("../datasets/pins_Adriana Lima/Adriana Lima173_74.jpg",mean))
-print(idx)
+def arrEigenFace(S,data):
+    #membuat suatu array of matrix dari eigen face
+    ret = []
+    selisih = OM.Selisih(S,data)
+    for i in range (data):
+        Val,Vec = Eig.getEigen(S[i])
+        eFace = EigenFace(Vec,selisih[i],S)
+        np.append(ret,eFace)
+    return ret
+
+
+S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/pins_Adriana Lima")
+arrOfEigen = arrEigenFace(S,213)
+mean = OM.RataRataMatrix(S)
+idx = EuclideanDistance(arrOfEigen,EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/pins_Adriana Lima/Adriana Lima2_100.jpg",mean))
+
+cv.imwrite('gambar1',S[idx])
+#klo bener berarti nanti gambar1 ini sama kyk  adriana lima2 100
