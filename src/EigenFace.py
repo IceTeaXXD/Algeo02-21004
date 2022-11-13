@@ -15,7 +15,7 @@ def EigenFace(eigenvector, selisih, S):
     for i in range(0,len(S)):
         miu = 0
         for k in range(0, len(S[0])):
-            miu += selisih[i] * eigenvector[i][k]
+            miu += np.dot(eigenvector[i][k], selisih[i])
         miuarr.append(miu)
     miuarr = np.array(miuarr)
     return miuarr
@@ -39,6 +39,7 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
                 if (distance < min).any():
                     min = distance
                     idxdistance = i
+    # print(min)
     return idxdistance
 
 def arrEigenFace(S,data):
@@ -52,10 +53,33 @@ def arrEigenFace(S,data):
     return ret
 
 
-S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/pins_Adriana Lima")
-arrOfEigen = arrEigenFace(S,213)
-mean = OM.RataRataMatrix(S)
-idx = EuclideanDistance(arrOfEigen,EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/pins_Adriana Lima/Adriana Lima2_100.jpg",mean))
+# Siapkan himpunan S
+S = II.DataSetToMatrix("../datasets/DATASET")
+# print("Done 1")
 
-cv.imwrite('gambar1',S[idx])
+# Hitung rata-rata
+mean = OM.RataRataMatrix(S)
+# print("Done 2")
+# cv.imwrite("keanure.jpg",np.array(mean))
+
+# Hitung selisih
+selisih = OM.Selisih(S, len(S))
+# print("Done 3")
+
+# Buat Kovarian
+cov = OM.kovarian(selisih, len(selisih))
+# print("Done 4")
+
+# Hitung EigenVector dari Kovarian
+eigenval, eigenvec = Eig.getEigen(cov)
+# print("Done 5")
+
+# Hitung EigenFace training Images
+eigface = EigenFace(eigenvec, selisih, S)
+# print("Done 6")
+
+idx = EuclideanDistance(eigface,EigenNewFace("./obama.jpg",mean))
+# print(idx)
+
+cv.imwrite('gambar1.jpg',S[idx])
 #klo bener berarti nanti gambar1 ini sama kyk  adriana lima2 100
