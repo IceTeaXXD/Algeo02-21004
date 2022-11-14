@@ -2,6 +2,10 @@ from tkinter import *
 import tkinter.filedialog as fd
 from PIL import ImageTk, Image
 import cv2 as cv
+import Eigen as Eig
+import EigenFace as EigF
+import OperasiMatriks as OM
+import InputImage as II
 
 # Fungsi menerima dataset untuk diubah
 # Jika fungsi dijalankan, akan sekaligus menjalankan FR
@@ -15,7 +19,34 @@ def select_gambar(dataset):
         image = cv.imread(path)
         image = cv.resize(image, (256,256))
 
-        # Manipulasi segala disini
+        # Manipulasi segala 
+        # Siapkan himpunan S
+        S = II.DataSetToMatrix(dataset)
+        print("Done 1")
+
+        # Hitung rata-rata
+        mean = OM.RataRataMatrix(S)
+        print("Done 2")
+        # cv.imwrite("keanure.jpg",np.array(mean))
+
+        # Hitung selisih
+        selisih = OM.Selisih(S, len(S))
+        print("Done 3")
+
+        # Buat Kovarian
+        cov = OM.kovarian(selisih, len(selisih))
+        print("Done 4")
+
+        # Hitung EigenVector dari Kovarian
+        eigenval, eigenvec = Eig.getEigen(cov)
+        print("Done 5")
+
+        # Hitung EigenFace training Images
+        eigface = EigF.EigenFace(eigenvec, selisih, S)
+        print("Done 6")
+
+        idx = EigF.EuclideanDistance(eigface,EigF.EigenNewFace(path,mean))
+
         # Fungsi FR nanti taro disini aja
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = Image.fromarray(image)
@@ -25,8 +56,13 @@ def select_gambar(dataset):
         img_input.configure(image=image)
         img_input.image = image
 
+        cv.imwrite("hasil.jpg", S[idx])
+
+        image_result = ImageTk.PhotoImage("hasil.jpg")
+        img_result.configure(image = image_result)
+        img_result.image = image_result
         # contoh not found
-        found = True
+        """ found = True
         if (not found):
             image_result = Image.open("./src/not found.png")
             image_result = ImageTk.PhotoImage(image_result)
@@ -34,7 +70,7 @@ def select_gambar(dataset):
             img_result.image = image_result
             name.configure(text = "Not Found")
         else:
-            name.configure(text = "Someone's Name")
+            name.configure(text = "Someone's Name") """
     else:
         name.configure(text="Silakan pilih dataset terlebih dahulu!")
 
@@ -57,7 +93,7 @@ judul = Label(text="Eigenface Face Recognition", font=('14'))
 judul.grid(column=0, columnspan=3, row=0)
 
 # Set 2 tempat gambar
-img = ImageTk.PhotoImage(Image.open("./src/default.jpg"))
+img = ImageTk.PhotoImage(Image.open("./default.jpg"))
 img_input = Label(image = img, width=256, height=256)
 img_result = Label(image = img, width=256, height=256)
 img_input.grid(column=1, row=1, rowspan=2,padx=5)

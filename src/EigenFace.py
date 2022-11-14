@@ -60,26 +60,29 @@ S = II.DataSetToMatrix("../datasets/DATASET")
 # Hitung rata-rata
 mean = OM.RataRataMatrix(S)
 # print("Done 2")
-# cv.imwrite("keanure.jpg",np.array(mean))
+# cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
 # Hitung selisih
 selisih = OM.Selisih(S, len(S))
+print(selisih)
 # print("Done 3")
 
 # Buat Kovarian
 cov = OM.kovarian(selisih, len(selisih))
+print("------------------------------------\n")
+print(cov)
 # print("Done 4")
 
 # Hitung EigenVector dari Kovarian
-eigenval, eigenvec = Eig.getEigen(cov)
+# eigenval, eigenvec = Eig.getEigen(cov)
 # print("Done 5")
 
 # Hitung EigenFace training Images
-eigface = EigenFace(eigenvec, selisih, S)
+# eigface = EigenFace(eigenvec, selisih, S)
 # print("Done 6")
 
-idx = EuclideanDistance(eigface,EigenNewFace("./obama.jpg",mean))
+# idx = EuclideanDistance(eigface,EigenNewFace("./obama.jpg",mean))
 # print(idx)
 
-cv.imwrite('gambar1.jpg',S[idx])
+# cv.imwrite('gambar1.jpg',S[idx])
 #klo bener berarti nanti gambar1 ini sama kyk  adriana lima2 100
