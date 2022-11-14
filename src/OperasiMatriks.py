@@ -27,12 +27,8 @@ def Selisih(S,data):
 def kovarian(S,data):
     sp = np.array(S)
     k = np.array([S[0]])
-    # k = np.concatenate((k,[sp[1]]),axis = 0)
-    # k = np.concatenate((k,[sp[2]]),axis = 0)
-    # k = np.transpose(k)
     for i in range (1,data):
         k = np.concatenate((k,[sp[i]]),axis = 0) 
     kt = np.transpose(k)
-    # c = np.dot(kt[0],k)
-    # k = np.transpose(k)
-    return k
+    c = np.dot(np.transpose(kt[0]), kt[0])
+    return c
