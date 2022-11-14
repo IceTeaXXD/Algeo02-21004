@@ -9,11 +9,7 @@ def VektorSatuan(M):
     for i in range(len(M)):
         temp.append(M[i])
 
-    sum = 0
-    for i in range (len(M)):
-        sum += temp[i] ** 2
-
-    sum = math.sqrt(sum)
+    sum = np.linalg.norm(temp)
 
     for i in range (len(M)):
         temp[i] = temp[i] / sum
