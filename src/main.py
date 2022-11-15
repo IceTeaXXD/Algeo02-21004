@@ -6,6 +6,7 @@ import Eigen as Eig
 import EigenFace as EigF
 import OperasiMatriks as OM
 import InputImage as II
+import numpy as np
 
 # Fungsi menerima dataset untuk diubah
 # Jika fungsi dijalankan, akan sekaligus menjalankan FR
@@ -22,30 +23,33 @@ def select_gambar(dataset):
         # Manipulasi segala 
         # Siapkan himpunan S
         S = II.DataSetToMatrix(dataset)
-        print("Done 1")
+        # print("Done 1")
 
         # Hitung rata-rata
         mean = OM.RataRataMatrix(S)
-        print("Done 2")
-        # cv.imwrite("keanure.jpg",np.array(mean))
+        # print("Done 2")
+        # cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
         # Hitung selisih
         selisih = OM.Selisih(S, len(S))
-        print("Done 3")
+        # print("Done 3")
 
         # Buat Kovarian
         cov = OM.kovarian(selisih, len(selisih))
-        print("Done 4")
+        # print("Done 4")
 
         # Hitung EigenVector dari Kovarian
         eigenval, eigenvec = Eig.getEigen(cov)
-        print("Done 5")
+        # print("Done 5")
 
         # Hitung EigenFace training Images
-        eigface = EigF.EigenFace(eigenvec, selisih, S)
-        print("Done 6")
+        eigface,weightf = EigF.EigenFace(eigenvec, selisih, S)
+        # print("Done 6")
 
-        idx = EigF.EuclideanDistance(eigface,EigF.EigenNewFace(path,mean))
+        # print the time neede to run the program
+
+        weightnf = EigF.EigenNewFace(path,mean,eigface)
+        idx = EigF.EuclideanDistance(weightf,weightnf)
 
         # Fungsi FR nanti taro disini aja
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
@@ -56,9 +60,8 @@ def select_gambar(dataset):
         img_input.configure(image=image)
         img_input.image = image
 
-        cv.imwrite("hasil.jpg", S[idx])
-
-        image_result = ImageTk.PhotoImage("hasil.jpg")
+        image_result = Image.fromarray(np.reshape(S[idx], (256,256)))
+        image_result = ImageTk.PhotoImage(image_result)
         img_result.configure(image = image_result)
         img_result.image = image_result
         # contoh not found
