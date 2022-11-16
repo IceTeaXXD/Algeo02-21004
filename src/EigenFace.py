@@ -22,9 +22,15 @@ def EigenFace(eigenvector, selisih, S):
     for i in range (len(eigFace)):
         for j in range (len(eigFace[0])):
             eigFace[i][j] = eigFace[i][j] + rata[i]
-
+    #cari k untuk membuat suatu eigen face yang paling efektif (diambil 50%)
+    k = round(len(eigFace)*0.5)
+    ret = [[0 for i in range (len(eigFace[0]))] for j in range (k)]
+    for i in range (len(ret)):
+        for j in range (len(ret[0])):
+            ret[i][j] = eigFace[i][j]
+    eigFace = np.array(ret)
     # calculate the weight of each eigenface
-    weight = [[0 for x in range(len(eigFace))] for y in range(len(eigFace))]
+    weight = [[0 for x in range(len(eigFace))] for y in range(len(selisih))]
 
     for i in range(len(selisih)):
         for j in range(len(eigFace)):
