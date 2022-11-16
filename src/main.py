@@ -16,7 +16,7 @@ def select_gambar(dataset):
     if(dataset != None):
         # Buka File
         path = fd.askopenfilename()
-
+        t = 0
         # Baca gambar
         image = cv.imread(path)
         image = cv.resize(image, (256,256))

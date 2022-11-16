@@ -55,9 +55,6 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
     # find the minimum distance
     min = distance[0]
     max = distance[0]
-    print(distance)
-    print('------------')
-    print(max)
     index = 0
     for i in range(len(distance)):
         if distance[i] < min:
@@ -66,15 +63,13 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
         if distance[i]>max:
             max = distance[i]
     th = 0.15*max
-    print('---------------')
-    print(min)
     if (min<th):
         bth = True
     else:
         bth = False
     return index,bth
-
-"""  # Siapkan himpunan S
+'''
+ # Siapkan himpunan S
 S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/DATASET")
 # print("Done 1")
 
@@ -100,7 +95,7 @@ eigface,weightf = EigenFace(eigenvec, s2, S)
 # print("Done 6")
 
 
-weightnf = EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/obama.jpg",mean,eigface)
+weightnf = EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/mat4.jpg",mean,eigface)
 idx,t = EuclideanDistance(weightf,weightnf)
 
 # print the time neede to run the program
@@ -109,4 +104,4 @@ if (t):
     cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256))))
 else:
     print("TAI")
- """
+'''
