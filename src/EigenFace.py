@@ -24,10 +24,10 @@ def EigenFace(eigenvector, selisih, S):
             eigFace[i][j] = eigFace[i][j] + rata[i]
 
     # calculate the weight of each eigenface
-    weight = [[0 for x in range(25)] for y in range(len(eigFace))]
+    weight = [[0 for x in range(len(eigFace))] for y in range(len(eigFace))]
 
     for i in range(len(selisih)):
-        for j in range(25):
+        for j in range(len(eigFace)):
             weight[i][j] = np.dot(eigFace[j],selisih[i])
     weight = np.array(weight)
     return eigFace, weight
