@@ -8,7 +8,6 @@ import Eigen as Eig
 import InputImage as II
 import time
 
-
 def EigenFace(eigenvector, selisih, S):
     eigFace = []
     A = np.array([selisih[0]])
@@ -41,7 +40,6 @@ def EigenNewFace(FaceDir,mean, eigFace):
     subtracted = subtracted[0]
     subtracted = np.transpose(subtracted)
     weight = np.matmul(eigFace,subtracted)
-    # print(np.shape(weight))
     return weight
 
 def EuclideanDistance(faceMatriks, EigenNewFace):
@@ -54,10 +52,8 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
         for j in range (len(faceMatriks[0])):
             sum += (faceMatriks[i][j] - EigenNewFace[j])**2
         distance[i] = np.sqrt(sum)
-    # print(np.array(distance))
     # find the minimum distance
     min = distance[0]
-    print(distance)
     index = 0
     for i in range(len(distance)):
         if distance[i] < min:
@@ -65,22 +61,17 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
             index = i
     return index
 
-# Siapkan himpunan S
-S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/DATASET")
+""" # Siapkan himpunan S
+S = II.DataSetToMatrix("../datasets/DATASET")
 # print("Done 1")
 
 # Hitung rata-rata
-# mean = OM.RataRataMatrix(S)
+mean = OM.RataRataMatrix(S)
 # print("Done 2")
 # cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
 # Hitung selisih
-# print('00000000000000000')
-# print(selisih)
-# print('000000000000000000')
-s2 = OM.norm(S)
-# print(s2)
-# print('0000000000000000000000')
+s2 = OM.Selisih(S, len(S))
 # print("Done 3")
 
 # Buat Kovarian
@@ -89,16 +80,16 @@ cov = OM.kovarian(s2, len(s2))
 
 # Hitung EigenVector dari Kovarian
 eigenval, eigenvec = Eig.getEigen(cov)
-# eigenval,eigenvec = np.linalg.eig(cov)
 # print("Done 5")
 
 # Hitung EigenFace training Images
 eigface,weightf = EigenFace(eigenvec, s2, S)
 # print("Done 6")
-# print the time neede to run the program
-mean = OM.rata(S)
-weightnf = EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/bill.jpg",mean,eigface)
+
+
+weightnf = EigenNewFace("obama.jpg",mean,eigface)
 idx = EuclideanDistance(weightf,weightnf)
 
+# print the time neede to run the program
 print("Time needed to run the program: ", time.process_time(), "seconds")
-cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256))))
+cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256)))) """
