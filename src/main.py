@@ -50,7 +50,7 @@ def select_gambar(dataset):
         weightnf = EigF.EigenNewFace(path,mean,eigface)
         print("Done 7")
 
-        idx = EigF.EuclideanDistance(weightf,weightnf)
+        idx,th = EigF.EuclideanDistance(weightf,weightnf)
         print("Done 8")
 
         t = time.process_time()
@@ -67,10 +67,18 @@ def select_gambar(dataset):
         img_input.configure(image=image)
         img_input.image = image
 
-        image_result = Image.fromarray(np.reshape(S[idx], (256,256)))
-        image_result = ImageTk.PhotoImage(image_result)
-        img_result.configure(image = image_result)
-        img_result.image = image_result
+        if (th):
+            image_result = Image.fromarray(np.reshape(S[idx], (256,256)))
+            image_result = ImageTk.PhotoImage(image_result)
+            img_result.configure(image = image_result)
+            img_result.image = image_result
+            name.configure(text = "Result: ")
+        else:
+            image_result = Image.open("./not found.png")
+            image_result = ImageTk.PhotoImage(image_result)
+            img_result.configure(image = image_result)
+            img_result.image = image_result
+            name.configure(text = "Not Found")
         wkt.configure(text = "Compile time "+ str(t) + " second")
         # contoh not found
         """ found = True

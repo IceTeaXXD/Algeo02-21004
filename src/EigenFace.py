@@ -54,15 +54,28 @@ def EuclideanDistance(faceMatriks, EigenNewFace):
         distance[i] = np.sqrt(sum)
     # find the minimum distance
     min = distance[0]
+    max = distance[0]
+    print(distance)
+    print('------------')
+    print(max)
     index = 0
     for i in range(len(distance)):
         if distance[i] < min:
             min = distance[i]
             index = i
-    return index
+        if distance[i]>max:
+            max = distance[i]
+    th = 0.15*max
+    print('---------------')
+    print(min)
+    if (min<th):
+        bth = True
+    else:
+        bth = False
+    return index,bth
 
-""" # Siapkan himpunan S
-S = II.DataSetToMatrix("../datasets/DATASET")
+"""  # Siapkan himpunan S
+S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/DATASET")
 # print("Done 1")
 
 # Hitung rata-rata
@@ -87,9 +100,13 @@ eigface,weightf = EigenFace(eigenvec, s2, S)
 # print("Done 6")
 
 
-weightnf = EigenNewFace("obama.jpg",mean,eigface)
-idx = EuclideanDistance(weightf,weightnf)
+weightnf = EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/obama.jpg",mean,eigface)
+idx,t = EuclideanDistance(weightf,weightnf)
 
 # print the time neede to run the program
 print("Time needed to run the program: ", time.process_time(), "seconds")
-cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256)))) """
+if (t):
+    cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256))))
+else:
+    print("TAI")
+ """
