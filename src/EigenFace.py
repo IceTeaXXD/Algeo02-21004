@@ -8,30 +8,27 @@ import Eigen as Eig
 import InputImage as II
 import time
 
+
 def EigenFace(eigenvector, selisih, S):
-    #I.S. eigenvector dan selisih berupa matriks terdefinisi.
-            # S set of matriks
-    #F.S. mengembalikan nilai eigenface dari satu wajah
     eigFace = []
     A = np.array([selisih[0]])
     for i in range(1,len(selisih)):
         A = np.concatenate((A,[selisih[i]]),axis = 0)
     A = np.transpose(A)
     A = A[0]
-    A = np.transpose(A)
-    for i in range(0,len(S)):
-        miu = np.dot(np.transpose(eigenvector[i]),A)
-        eigFace.append(miu)
-    eigFace = np.array(eigFace)
-    # normalize miuarr
-    for i in range(len(eigFace)):
-        eigFace[i] = eigFace[i] / np.linalg.norm(eigFace[i])
+    rata = OM.RataRataMatrix(S)
+    rata = np.array(rata)
+    eigFace = np.matmul(A,eigenvector)
+    eigFace = np.transpose(eigFace)
+    for i in range (len(eigFace)):
+        for j in range (len(eigFace[0])):
+            eigFace[i][j] = eigFace[i][j] + rata[i]
 
     # calculate the weight of each eigenface
-    weight = [[0 for x in range(20)] for y in range(len(eigFace))]
+    weight = [[0 for x in range(25)] for y in range(len(eigFace))]
 
     for i in range(len(selisih)):
-        for j in range(20):
+        for j in range(25):
             weight[i][j] = np.dot(eigFace[j],selisih[i])
     weight = np.array(weight)
     return eigFace, weight
@@ -43,71 +40,65 @@ def EigenNewFace(FaceDir,mean, eigFace):
     subtracted = np.transpose(subtracted)
     subtracted = subtracted[0]
     subtracted = np.transpose(subtracted)
-
-    weight = [[0 for i in range(20)] for j in range(1)]
-    for i in range(1):
-        for j in range(20):
-            weight[i][j] = np.dot(eigFace[j],subtracted)
-    weight = np.array(weight)
-    print(np.shape(weight))
+    weight = np.matmul(eigFace,subtracted)
+    # print(np.shape(weight))
     return weight
 
 def EuclideanDistance(faceMatriks, EigenNewFace):
     # I.S. faceMatriks dan EigenNewFace terdefinisi
     # F.S. mengembalikan nilai jarak euclidean dari wajah baru dengan wajah yang sudah ada
-    distance = []
-    for i in range(len(faceMatriks)):
-        distance.append(np.linalg.norm(faceMatriks[i] - EigenNewFace))
-    
-    # return the minimum distance
+    distance = [0 for i in range(len(faceMatriks))]
+    sum  = 0
+    for i in range (len(faceMatriks)):
+        sum = 0
+        for j in range (len(faceMatriks[0])):
+            sum += (faceMatriks[i][j] - EigenNewFace[j])**2
+        distance[i] = np.sqrt(sum)
+    # print(np.array(distance))
+    # find the minimum distance
+    min = distance[0]
     print(distance)
-    return distance.index(min(distance))
+    index = 0
+    for i in range(len(distance)):
+        if distance[i] < min:
+            min = distance[i]
+            index = i
+    return index
 
 # Siapkan himpunan S
-S = II.DataSetToMatrix("../datasets/DATASET")
+S = II.DataSetToMatrix("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/datasets/DATASET")
 # print("Done 1")
 
 # Hitung rata-rata
-mean = OM.RataRataMatrix(S)
+# mean = OM.RataRataMatrix(S)
 # print("Done 2")
 # cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
 # Hitung selisih
-selisih = OM.Selisih(S, len(S))
+# print('00000000000000000')
+# print(selisih)
+# print('000000000000000000')
+s2 = OM.norm(S)
+# print(s2)
+# print('0000000000000000000000')
 # print("Done 3")
 
 # Buat Kovarian
-cov = OM.kovarian(selisih, len(selisih))
+cov = OM.kovarian(s2, len(s2))
 # print("Done 4")
 
 # Hitung EigenVector dari Kovarian
 eigenval, eigenvec = Eig.getEigen(cov)
+# eigenval,eigenvec = np.linalg.eig(cov)
 # print("Done 5")
 
 # Hitung EigenFace training Images
-eigface,weightf = EigenFace(eigenvec, selisih, S)
+eigface,weightf = EigenFace(eigenvec, s2, S)
 # print("Done 6")
-
 # print the time neede to run the program
-
-weightnf = EigenNewFace("hemscort.png",mean,eigface)
+mean = OM.rata(S)
+weightnf = EigenNewFace("D:/SemesterIII/Algeo/Tubes2/1/Algeo02-21004/bill.jpg",mean,eigface)
 idx = EuclideanDistance(weightf,weightnf)
-print(idx)
 
 print("Time needed to run the program: ", time.process_time(), "seconds")
-cv.imwrite("gambarkontolhenry.jpg",np.array(np.reshape(S[idx],(256,256))))
-#klo bener berarti nanti gambar1 ini sama kyk  adriana lima2 100
-
-
-# TEMP
-    # min = 999999999999
-    # for i in range (len(faceMatriks)):
-    #     temp = np.subtract(faceMatriks[i],EigenNewFace)
-    #     for j in range (len(temp[i])):
-    #         for k in range (256):
-    #             distance = temp[i][j]**2
-    #             if (distance < min).any():
-    #                 min = distance
-    #                 idxdistance = i
-    # # print(min)
-    # return idxdistance
+cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256))))

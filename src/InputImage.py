@@ -8,7 +8,7 @@ import os
 def ImgToMatrix(filename):
     # membuat gambar menjadi grayscale
     img = cv.imread(filename)
-    img = cv.resize(img, (256,256))
+    img = cv.resize(img, (256,256),interpolation = cv.INTER_AREA)
     _grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     _grey = _grey.reshape(65536,1)
     return _grey
