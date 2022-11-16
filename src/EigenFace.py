@@ -6,68 +6,76 @@ import numpy as np
 import OperasiMatriks as OM
 import Eigen as Eig
 import InputImage as II
+import time
 
 def EigenFace(eigenvector, selisih, S):
-    #I.S. eigenvector dan selisih berupa matriks terdefinisi.
-            # S set of matriks
-    #F.S. mengembalikan nilai eigenface dari satu wajah
-    miuarr = []
-    for i in range(0,len(S)):
-        miu = 0
-        for k in range(0, len(S[0])):
-            miu += np.dot(eigenvector[i][k], selisih[i])
-        miuarr.append(miu)
-    miuarr = np.array(miuarr)
-    return miuarr
+    eigFace = []
+    A = np.array([selisih[0]])
+    for i in range(1,len(selisih)):
+        A = np.concatenate((A,[selisih[i]]),axis = 0)
+    A = np.transpose(A)
+    A = A[0]
+    rata = OM.RataRataMatrix(S)
+    rata = np.array(rata)
+    eigFace = np.matmul(A,eigenvector)
+    eigFace = np.transpose(eigFace)
+    for i in range (len(eigFace)):
+        for j in range (len(eigFace[0])):
+            eigFace[i][j] = eigFace[i][j] + rata[i]
 
-def EigenNewFace(FaceDir,mean):
+    # calculate the weight of each eigenface
+    weight = [[0 for x in range(25)] for y in range(len(eigFace))]
+
+    for i in range(len(selisih)):
+        for j in range(25):
+            weight[i][j] = np.dot(eigFace[j],selisih[i])
+    weight = np.array(weight)
+    return eigFace, weight
+
+def EigenNewFace(FaceDir,mean, eigFace):
     # Buat wajah jadi matriks
     faceMatriks = II.ImgToMatrix(FaceDir)
-    EigenVal, EigenVec = Eig.getEigen(faceMatriks)
-    subtracted = np.subtract(faceMatriks,mean)
-    miuFace = np.dot(EigenVec, subtracted)
-
-    return miuFace
+    subtracted = np.subtract(faceMatriks, mean)
+    subtracted = np.transpose(subtracted)
+    subtracted = subtracted[0]
+    subtracted = np.transpose(subtracted)
+    weight = np.matmul(eigFace,subtracted)
+    return weight
 
 def EuclideanDistance(faceMatriks, EigenNewFace):
-    min = 999999999999
+    # I.S. faceMatriks dan EigenNewFace terdefinisi
+    # F.S. mengembalikan nilai jarak euclidean dari wajah baru dengan wajah yang sudah ada
+    distance = [0 for i in range(len(faceMatriks))]
+    sum  = 0
     for i in range (len(faceMatriks)):
-        temp = np.subtract(faceMatriks[i],EigenNewFace)
-        for j in range (len(temp[i])):
-            for k in range (256):
-                distance = temp[i][j]**2
-                if (distance < min).any():
-                    min = distance
-                    idxdistance = i
-    # print(min)
-    return idxdistance
+        sum = 0
+        for j in range (len(faceMatriks[0])):
+            sum += (faceMatriks[i][j] - EigenNewFace[j])**2
+        distance[i] = np.sqrt(sum)
+    # find the minimum distance
+    min = distance[0]
+    index = 0
+    for i in range(len(distance)):
+        if distance[i] < min:
+            min = distance[i]
+            index = i
+    return index
 
-def arrEigenFace(S,data):
-    #membuat suatu array of matrix dari eigen face
-    ret = []
-    selisih = OM.Selisih(S,data)
-    for i in range (data):
-        Val,Vec = Eig.getEigen(S[i])
-        eFace = EigenFace(Vec,selisih[i],S)
-        np.append(ret,eFace)
-    return ret
-
-
-# Siapkan himpunan S
+""" # Siapkan himpunan S
 S = II.DataSetToMatrix("../datasets/DATASET")
 # print("Done 1")
 
 # Hitung rata-rata
 mean = OM.RataRataMatrix(S)
 # print("Done 2")
-# cv.imwrite("keanure.jpg",np.array(mean))
+# cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
 # Hitung selisih
-selisih = OM.Selisih(S, len(S))
+s2 = OM.Selisih(S, len(S))
 # print("Done 3")
 
 # Buat Kovarian
-cov = OM.kovarian(selisih, len(selisih))
+cov = OM.kovarian(s2, len(s2))
 # print("Done 4")
 
 # Hitung EigenVector dari Kovarian
@@ -75,11 +83,13 @@ eigenval, eigenvec = Eig.getEigen(cov)
 # print("Done 5")
 
 # Hitung EigenFace training Images
-eigface = EigenFace(eigenvec, selisih, S)
+eigface,weightf = EigenFace(eigenvec, s2, S)
 # print("Done 6")
 
-idx = EuclideanDistance(eigface,EigenNewFace("./obama.jpg",mean))
-# print(idx)
 
-cv.imwrite('gambar1.jpg',S[idx])
-#klo bener berarti nanti gambar1 ini sama kyk  adriana lima2 100
+weightnf = EigenNewFace("obama.jpg",mean,eigface)
+idx = EuclideanDistance(weightf,weightnf)
+
+# print the time neede to run the program
+print("Time needed to run the program: ", time.process_time(), "seconds")
+cv.imwrite("test.jpg",np.array(np.reshape(S[idx],(256,256)))) """
