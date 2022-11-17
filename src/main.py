@@ -24,6 +24,15 @@ def select_gambar(dataset):
         image = cv.imread(path)
         image = cv.resize(image, (256,256))
 
+        # Update Gambar
+        image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+        image = Image.fromarray(image)
+        image = ImageTk.PhotoImage(image)
+
+        # Update gambar
+        canvas.itemconfig(img_input,image=image)
+        label_input.image = image
+
         # Manipulasi segala 
         # Siapkan himpunan S
         S = II.DataSetToMatrix(dataset)
@@ -32,7 +41,6 @@ def select_gambar(dataset):
         # Hitung rata-rata
         mean = OM.RataRataMatrix(S)
         print("Done 2")
-        # cv.imwrite("keanure.jpg",np.array(np.reshape(mean,(256,256))))
 
         # Hitung selisih
         s2 = OM.Selisih(S, len(S))
@@ -56,18 +64,6 @@ def select_gambar(dataset):
         idx,th = EigF.EuclideanDistance(weightf,weightnf)
         print("Done 8")
 
-        # print the time neede to run the program
-        # print("Time needed to run the program: ", time.process_time(), "seconds")
-
-        # Fungsi FR nanti taro disini aja
-        image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-        image = Image.fromarray(image)
-        image = ImageTk.PhotoImage(image)
-
-        # Update gambar
-        canvas.itemconfig(img_input,image=image)
-        label_input.image = image
-
         if (th):
             image_result = Image.fromarray(np.reshape(S[idx], (256,256)))
             image_result = ImageTk.PhotoImage(image_result)
@@ -76,7 +72,7 @@ def select_gambar(dataset):
             canvas.itemconfig(name,text = "Result: ")
         else:
             image_result = Image.open("./not found.png")
-            image_result = image_result.resize(256,256)
+            image_result = image_result.resize((256,256))
             image_result = ImageTk.PhotoImage(image_result)
             canvas.itemconfig(img_result,image = image_result)
             label_result.image = image_result
