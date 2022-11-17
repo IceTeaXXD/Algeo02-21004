@@ -1,3 +1,4 @@
+from pathlib import Path
 from tkinter import *
 import tkinter.filedialog as fd
 from PIL import ImageTk, Image
@@ -9,8 +10,9 @@ import InputImage as II
 import numpy as np
 import time
 
-# Fungsi menerima dataset untuk diubah
-# Jika fungsi dijalankan, akan sekaligus menjalankan FR
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
+
 def select_gambar(dataset):
     start = time.time()
     global img_input, img_result, name, wkt
@@ -63,26 +65,27 @@ def select_gambar(dataset):
         image = ImageTk.PhotoImage(image)
 
         # Update gambar
-        img_input.configure(image=image)
-        img_input.image = image
+        canvas.itemconfig(img_input,image=image)
+        label_input.image = image
 
         if (th):
             image_result = Image.fromarray(np.reshape(S[idx], (256,256)))
             image_result = ImageTk.PhotoImage(image_result)
-            img_result.configure(image = image_result)
-            img_result.image = image_result
-            name.configure(text = "Result: ")
+            canvas.itemconfig(img_result,image = image_result)
+            label_result.image = image_result
+            canvas.itemconfig(name,text = "Result: ")
         else:
             image_result = Image.open("./not found.png")
+            image_result = image_result.resize(256,256)
             image_result = ImageTk.PhotoImage(image_result)
-            img_result.configure(image = image_result)
-            img_result.image = image_result
-            name.configure(text = "Not Found")
+            canvas.itemconfig(img_result,image = image_result)
+            label_result.image = image_result
+            canvas.itemconfig(name,text = "Not Found")
         end = time.time()
         t = end-start
-        wkt.configure(text = "Compile time "+ str(t) + " second")
+        canvas.itemconfig(wkt,text = "Compile time: "+ str(round(t,2)) + " second", font=("Poppins Bold", 20 * -1))
     else:
-        name.configure(text="Silakan pilih dataset terlebih dahulu!")
+        canvas.itemconfig(name,text="Silakan pilih dataset terlebih dahulu!",font=("Poppins Bold", 20 * -1))
 
 # Memilih folder dataset,
 # Mengembalikan folder dataset
@@ -92,37 +95,147 @@ def select_dataset():
     dataset = dataset_path
     return
 
-# Initialize tkinter
-root = Tk()
+def relative_to_assets(path: str) -> Path:
+    return ASSETS_PATH / Path(path)
+
+window = Tk()
 dataset = None
-# Nama Window
-root.title("Face Recognition")
+window.geometry("1280x720")
+window.configure(bg = "#12151D")
+window.title("Face Recognition")
 
-# Judul Dari APP
-judul = Label(text="Eigenface Face Recognition", font=('14'))
-judul.grid(column=0, columnspan=3, row=0)
+canvas = Canvas(
+    window,
+    bg = "#12151D",
+    height = 720,
+    width = 1280,
+    bd = 0,
+    highlightthickness = 0,
+    relief = "ridge"
+)
 
-# Set 2 tempat gambar
-img = ImageTk.PhotoImage(Image.open("./default.jpg"))
-img_input = Label(image = img, width=256, height=256)
-img_result = Label(image = img, width=256, height=256)
-img_input.grid(column=1, row=1, rowspan=2,padx=5)
-img_result.grid(column=2, row=1, rowspan=2,padx=5)
+#Dummy Image
+canvas.place(x = 0, y = 0)
 
-# The Name
-name = Label(root, text="Result: ")
-name.grid(row=3, columnspan=3, column=0, pady=5)
+# Gambar Input
+img = Image.open("./default.jpg")
+img = img.resize((256,256))
+img = ImageTk.PhotoImage(img)
+img_input = canvas.create_image(
+    200,
+    150,
+    anchor = "nw",
+    image = img
+)
+label_input = Label(image = img)
 
-# Button select gambar
-btn = Button(root, text="Pilih Gambar Input", command=lambda: select_gambar(dataset))
-btn.grid(row=2, column=0, padx=5, pady=0)
+img_result = canvas.create_image(
+    750,
+    150,
+    anchor = "nw",
+    image = img
+)
+label_result = Label(image = img)
 
-# Button select dataset
-btn_data = Button(root, text = "Pilih Dataset", command=select_dataset)
-btn_data.grid(row =1 , column = 0, padx=5, pady=0)
+canvas.create_rectangle(
+    139.0,
+    426.0,
+    505.0,
+    480.0,
+    fill="#333A47",
+    outline="")
 
-# Compile Time Label
-wkt = Label(root, text="Compile Time: ")
-wkt.grid(row=3, column = 0, pady=5)
+canvas.create_rectangle(
+    706.0,
+    426.0,
+    1072.0,
+    480.0,
+    fill="#333A47",
+    outline="")
 
-root.mainloop()
+canvas.create_text(
+    896.0,
+    # 1000,
+    20.0,
+    anchor="nw",
+    text="Copyright © 2022 Academicos",
+    fill="#D4D4D4",
+    font=("Poppins Regular", 20 * -1)
+)
+
+name = canvas.create_text(
+    736.0,
+    437.0,
+    anchor="nw",
+    text="Result :",
+    fill="#D4D4D4",
+    font=("Poppins Bold", 32 * -1)
+)
+
+wkt = canvas.create_text(
+    163.0,
+    437.0,
+    anchor="nw",
+    text="Compile Time :",
+    fill="#D4D4D4",
+    font=("Poppins Bold", 32 * -1)
+)
+canvas.create_text(
+    403.0,
+    82.0,
+    anchor="nw",
+    text="Eigen Face Recognition",
+    fill="#D4D4D4",
+    font=("Poppins Bold", 40 * -1)
+)
+
+#Button image
+button_image_1 = PhotoImage(
+    file=relative_to_assets("button_1.png"))
+button_1 = Button(
+    image=button_image_1,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: select_gambar(dataset),
+    relief="flat"
+)   
+button_1.place(
+    x=536.0,
+    y=569.0,
+    width=198.06346130371094,
+    height=35.0
+)
+
+button_image_2 = PhotoImage(
+    file=relative_to_assets("button_2.png"))
+button_2 = Button(
+    image=button_image_2,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("Camera clicked"),
+    relief="flat"
+)
+button_2.place(
+    x=89.0,
+    y=570.0,
+    width=200.0634765625,
+    height=35.0
+)
+
+button_image_3 = PhotoImage(
+    file=relative_to_assets("button_3.png"))
+button_3 = Button(
+    image=button_image_3,
+    borderwidth=0,
+    highlightthickness=0,
+    command=select_dataset,
+    relief="flat"
+)
+button_3.place(
+    x=980.0,
+    y=569.0,
+    width=220.0,
+    height=33.0
+)
+window.resizable(True, True)
+window.mainloop()
