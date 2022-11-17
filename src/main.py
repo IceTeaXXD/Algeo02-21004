@@ -12,6 +12,7 @@ import time
 # Fungsi menerima dataset untuk diubah
 # Jika fungsi dijalankan, akan sekaligus menjalankan FR
 def select_gambar(dataset):
+    start = time.time()
     global img_input, img_result, name, wkt
     if(dataset != None):
         # Buka File
@@ -53,8 +54,6 @@ def select_gambar(dataset):
         idx,th = EigF.EuclideanDistance(weightf,weightnf)
         print("Done 8")
 
-        t = time.process_time()
-
         # print the time neede to run the program
         # print("Time needed to run the program: ", time.process_time(), "seconds")
 
@@ -79,6 +78,8 @@ def select_gambar(dataset):
             img_result.configure(image = image_result)
             img_result.image = image_result
             name.configure(text = "Not Found")
+        end = time.time()
+        t = end-start
         wkt.configure(text = "Compile time "+ str(t) + " second")
     else:
         name.configure(text="Silakan pilih dataset terlebih dahulu!")
