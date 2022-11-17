@@ -80,16 +80,6 @@ def select_gambar(dataset):
             img_result.image = image_result
             name.configure(text = "Not Found")
         wkt.configure(text = "Compile time "+ str(t) + " second")
-        # contoh not found
-        """ found = True
-        if (not found):
-            image_result = Image.open("./src/not found.png")
-            image_result = ImageTk.PhotoImage(image_result)
-            img_result.configure(image = image_result)
-            img_result.image = image_result
-            name.configure(text = "Not Found")
-        else:
-            name.configure(text = "Someone's Name") """
     else:
         name.configure(text="Silakan pilih dataset terlebih dahulu!")
 
