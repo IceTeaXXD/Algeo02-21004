@@ -9,6 +9,11 @@ import OperasiMatriks as OM
 import InputImage as II
 import numpy as np
 import time
+# import cam as cam
+import tkinter as tk
+import PIL
+import imutils
+
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
@@ -112,9 +117,9 @@ canvas = Canvas(
 
 #Dummy Image
 canvas.place(x = 0, y = 0)
-
+# camera = tk.scale
 # Gambar Input
-img = Image.open("./default.jpg")
+img = Image.open("D:/SemesterIII/Algeo/Tubes2/2/Algeo02-21004/src/default.jpg")
 img = img.resize((256,256))
 img = ImageTk.PhotoImage(img)
 img_input = canvas.create_image(
@@ -192,7 +197,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: select_gambar(dataset),
+    command=lambda: [Quit(),select_gambar(dataset)],
     relief="flat"
 )   
 button_1.place(
@@ -201,6 +206,52 @@ button_1.place(
     width=198.06346130371094,
     height=35.0
 )
+#---------------------------------------------------------------------
+cap = None
+def Stream():
+    global cap
+    cap = cv.VideoCapture(0)
+    Cam()
+def Cam():
+# Load the cascade
+    face_cascade = cv.CascadeClassifier('D:/SemesterIII/Algeo/Tubes2/2/Algeo02-21004/src/face_detector.xml')
+    global cap
+    _, img = cap.read()
+    tempimg = img
+    # roi_color = None
+    if _== True:
+        # Read the frame
+        gray = img
+        # Convert to grayscale
+        gray = cv.cvtColor(gray, cv.COLOR_BGR2GRAY)
+        # Detect the faces
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        # Draw the rectangle around each face
+        for (x, y, w, h) in faces:
+            cv.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
+            # capture every 5 seconds
+            if time.time() % 5 < 0.1:
+                print("Image Captured!")
+                cv.imwrite("face.jpg", roi_color)
+        gambar = Image.fromarray(tempimg)
+        rgambar = gambar.resize((250,250))
+        gambar2 = ImageTk.PhotoImage(image=rgambar)
+        video.configure(image = gambar2)
+        video.image = gambar2
+        video.after(10,Cam)
+    else:
+        video.image = ""
+        cap.release()
+
+def Quit():
+    global cap
+    video.place_forget()
+    cap.release()
+#---------------------------------------------------------------------
+video = tk.Label(window)
+video.place(x=200,y=150)
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
@@ -208,7 +259,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("Camera clicked"),
+    command= Stream,
     relief="flat"
 )
 button_2.place(
@@ -233,5 +284,5 @@ button_3.place(
     width=220.0,
     height=33.0
 )
-window.resizable(True, True)
+window.resizable(False, False)
 window.mainloop()
