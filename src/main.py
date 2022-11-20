@@ -9,7 +9,6 @@ import OperasiMatriks as OM
 import InputImage as II
 import numpy as np
 import time
-# import cam as cam
 import tkinter as tk
 import PIL
 
@@ -295,6 +294,7 @@ def Cam():
         gambar = Image.fromarray(tempimg)
         rgambar = gambar.resize((256,256))
         gambar2 = ImageTk.PhotoImage(image=rgambar)
+        video.place(x=200,y=150)
         video.configure(image = gambar2)
         video.image = gambar2
         video.after(10,Cam)
@@ -308,7 +308,6 @@ def Quit():
     cap.release()
 #---------------------------------------------------------------------
 video = tk.Label(window)
-video.place(x=200,y=150)
 
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
@@ -316,7 +315,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command= lambda: [Stream()],
+    command= Stream,
     relief="flat"
 )
 button_2.place(
