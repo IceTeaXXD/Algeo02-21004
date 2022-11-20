@@ -15,10 +15,12 @@ def ImgToMatrix(filename):
 
 def DataSetToMatrix(dir):
     S = []
+    FileNames = []
     for filename in os.listdir(dir):
         temp = ImgToMatrix(f'{dir}/{filename}')
         S += [temp]
-    return S
+        FileNames += [filename]
+    return S, FileNames
 
 def getAllDir():
     S = []

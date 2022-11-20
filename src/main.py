@@ -12,14 +12,12 @@ import time
 # import cam as cam
 import tkinter as tk
 import PIL
-import imutils
-
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
 def detectCam(dataset):
     start = time.time()
-    path = "../face.jpg"
+    path = "./face.jpg"
     if (dataset!=None):
         image = cv.imread(path)
         image = cv.resize(image, (256,256))
@@ -27,7 +25,7 @@ def detectCam(dataset):
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = Image.fromarray(image)
         image = ImageTk.PhotoImage(image)
-        S = II.DataSetToMatrix(dataset)
+        S, FNS = II.DataSetToMatrix(dataset)
         print("Done 1")
 
         # Hitung rata-rata
@@ -61,7 +59,7 @@ def detectCam(dataset):
             image_result = ImageTk.PhotoImage(image_result)
             canvas.itemconfig(img_result,image = image_result)
             label_result.image = image_result
-            canvas.itemconfig(name,text = "Result: ")
+            canvas.itemconfig(name,text = f"Result: {FNS[idx]}", font=("Poppins Bold", 20 * -1))
         else:
             image_result = Image.open("not found.png")
             image_result = image_result.resize((256,256))
@@ -97,7 +95,7 @@ def select_gambar(dataset):
 
         # Manipulasi segala 
         # Siapkan himpunan S
-        S = II.DataSetToMatrix(dataset)
+        S, FNS = II.DataSetToMatrix(dataset)
         print("Done 1")
 
         # Hitung rata-rata
@@ -131,7 +129,7 @@ def select_gambar(dataset):
             image_result = ImageTk.PhotoImage(image_result)
             canvas.itemconfig(img_result,image = image_result)
             label_result.image = image_result
-            canvas.itemconfig(name,text = "Result: ")
+            canvas.itemconfig(name,text = f"Result: {FNS[idx]}", font=("Poppins Bold", 20 * -1))
         else:
             image_result = Image.open("./not found.png")
             image_result = image_result.resize((256,256))
@@ -293,8 +291,9 @@ def Cam():
                 print("Image Captured!")
                 detectCam(dataset)
                 cv.imwrite("face.jpg", roi_color)
+        tempimg = cv.cvtColor(tempimg, cv.COLOR_BGR2RGB)
         gambar = Image.fromarray(tempimg)
-        rgambar = gambar.resize((250,250))
+        rgambar = gambar.resize((256,256))
         gambar2 = ImageTk.PhotoImage(image=rgambar)
         video.configure(image = gambar2)
         video.image = gambar2
