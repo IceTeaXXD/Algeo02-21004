@@ -74,7 +74,7 @@ def detectCam(dataset):
 
 def select_gambar(dataset):
     start = time.time()
-    global img_input, img_result, name, wkt
+    global img_input, img_result, name, wkt, flag_select_dataset, mean, eigface, weightf,s2,S,FNS
     if(dataset != None):
         # Buka File
         path = fd.askopenfilename()
@@ -92,30 +92,33 @@ def select_gambar(dataset):
         canvas.itemconfig(img_input,image=image)
         label_input.image = image
 
-        # Manipulasi segala 
+        # Manipulasi segala
+        if(flag_select_dataset):
         # Siapkan himpunan S
-        S, FNS = II.DataSetToMatrix(dataset)
-        print("Done 1")
+            S, FNS = II.DataSetToMatrix(dataset)
+            print("Done 1")
 
-        # Hitung rata-rata
-        mean = OM.RataRataMatrix(S)
-        print("Done 2")
+            # Hitung rata-rata
+            mean = OM.RataRataMatrix(S)
+            print("Done 2")
 
-        # Hitung selisih
-        s2 = OM.Selisih(S, len(S))
-        print("Done 3")
+            # Hitung selisih
+            s2 = OM.Selisih(S, len(S))
+            print("Done 3")
 
-        # Buat Kovarian
-        cov = OM.kovarian(s2, len(s2))
-        print("Done 4")
+            # Buat Kovarian
+            cov = OM.kovarian(s2, len(s2))
+            print("Done 4")
 
-        # Hitung EigenVector dari Kovarian
-        eigenval, eigenvec = Eig.getEigen(cov)
-        print("Done 5")
+            # Hitung EigenVector dari Kovarian
+            eigenval, eigenvec = Eig.getEigen(cov)
+            print("Done 5")
 
-        # Hitung EigenFace training Images
-        eigface,weightf = EigF.EigenFace(eigenvec, s2, S)
-        print("Done 6")
+            # Hitung EigenFace training Images
+            eigface,weightf = EigF.EigenFace(eigenvec, s2, S)
+            print("Done 6")
+
+            flag_select_dataset = False
         
         weightnf = EigF.EigenNewFace(path,mean,eigface)
         print("Done 7")
@@ -145,9 +148,10 @@ def select_gambar(dataset):
 # Memilih folder dataset,
 # Mengembalikan folder dataset
 def select_dataset():
-    global dataset
+    global dataset, flag_select_dataset
     dataset_path = fd.askdirectory()
     dataset = dataset_path
+    flag_select_dataset = True
     return
 
 def relative_to_assets(path: str) -> Path:
@@ -155,6 +159,13 @@ def relative_to_assets(path: str) -> Path:
 
 window = Tk()
 dataset = None
+flag_select_dataset = False
+mean = None
+s2 = None
+S = None
+FNS = None
+eigface = None
+weightf = None
 window.geometry("1280x720")
 window.configure(bg = "#12151D")
 window.title("Face Recognition")
