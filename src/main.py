@@ -15,6 +15,7 @@ import PIL
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
 def detectCam(dataset):
+    global img_input, img_result, name, wkt, flag_select_dataset, mean, eigface, weightf,s2,S,FNS
     start = time.time()
     path = "./face.jpg"
     if (dataset!=None):
@@ -24,29 +25,35 @@ def detectCam(dataset):
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         image = Image.fromarray(image)
         image = ImageTk.PhotoImage(image)
-        S, FNS = II.DataSetToMatrix(dataset)
-        print("Done 1")
 
-        # Hitung rata-rata
-        mean = OM.RataRataMatrix(S)
-        print("Done 2")
+        # Manipulasi segala
+        if(flag_select_dataset):
+        # Siapkan himpunan S
+            S, FNS = II.DataSetToMatrix(dataset)
+            print("Done 1")
 
-        # Hitung selisih
-        s2 = OM.Selisih(S, len(S))
-        print("Done 3")
+            # Hitung rata-rata
+            mean = OM.RataRataMatrix(S)
+            print("Done 2")
 
-        # Buat Kovarian
-        cov = OM.kovarian(s2, len(s2))
-        print("Done 4")
+            # Hitung selisih
+            s2 = OM.Selisih(S, len(S))
+            print("Done 3")
 
-        # Hitung EigenVector dari Kovarian
-        eigenval, eigenvec = Eig.getEigen(cov)
-        print("Done 5")
+            # Buat Kovarian
+            cov = OM.kovarian(s2, len(s2))
+            print("Done 4")
 
-        # Hitung EigenFace training Images
-        eigface,weightf = EigF.EigenFace(eigenvec, s2, S)
-        print("Done 6")
-            
+            # Hitung EigenVector dari Kovarian
+            eigenval, eigenvec = Eig.getEigen(cov)
+            print("Done 5")
+
+            # Hitung EigenFace training Images
+            eigface,weightf = EigF.EigenFace(eigenvec, s2, S)
+            print("Done 6")
+
+            flag_select_dataset = False
+        
         weightnf = EigF.EigenNewFace(path,mean,eigface)
         print("Done 7")
 
