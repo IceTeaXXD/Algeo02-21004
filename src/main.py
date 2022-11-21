@@ -80,13 +80,13 @@ def detectCam(dataset):
         canvas.itemconfig(name,text="Silakan pilih dataset terlebih dahulu!",font=("Poppins Bold", 20 * -1))
 
 def select_gambar(dataset):
-    start = time.time()
     global img_input, img_result, name, wkt, flag_select_dataset, mean, eigface, weightf,s2,S,FNS
     if(dataset != None):
         # Buka File
         path = fd.askopenfilename()
         t = 0
         # Baca gambar
+        start = time.time()
         image = cv.imread(path)
         image = cv.resize(image, (256,256))
 
